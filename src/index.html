@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Demo CI/CD + GitHub Pages</title>
+</head>
+<body>
+  <h1>CI/CD Demo — GitHub Pages</h1>
+  <p id="result">Результат: (пока пусто)</p>
+
+  <script type="module">
+    import sum from './js/sum.js';
+    const r = sum(2, 3);
+    document.getElementById('result').textContent = '2 + 3 = ' + r;
+  </script>
+</body>
+</html>
