@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
     "build": "copyfiles -u 1 src/**/* dist",
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
     "predeploy": "npm run build"
   },
   "devDependencies": {

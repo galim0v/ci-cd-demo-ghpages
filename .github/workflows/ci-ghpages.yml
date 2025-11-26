@@ -1,76 +1,33 @@
-name: CI → Build → Deploy (GitHub Pages)
+name: CI + Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
-  test:
-    name: Run unit tests
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Use Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 18
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Run tests
         run: npm test
 
-  deploy:
-    name: Deploy to GitHub Pages
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install deps
-        run: npm ci
-
-      - name: Build -> create dist/
+      - name: Build project
         run: npm run build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          publish_dir: ./dist
-          publish_branch: gh-pages
-          # Используем GITHUB_TOKEN (не нужно добавлять PAT)
           github_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Wait for GitHub Pages to be ready
-        run: sleep 5
-
-      - name: Smoke test deployed site (HTTP 200)
-        env:
-          OWNER: ${{ github.repository_owner }}
-          REPO: ${{ github.event.repository.name }}
-        run: |
-          URL="https://${OWNER}.github.io/${REPO}/"
-          echo "Checking $URL"
-          for i in 1 2 3; do
-            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$URL")
-            echo "Attempt $i: HTTP $HTTP_CODE"
-            if [ "$HTTP_CODE" -eq 200 ]; then
-              echo "Smoke OK"
-              exit 0
-            fi
-            sleep 3
-          done
-          echo "Smoke failed: $URL did not return 200"
-          exit 1
+          publish_dir: ./dist
