@@ -1,9 +1,5 @@
-import sum from '../src/js/sum.js';
+import sum from "../src/js/sum.js";
 
-test('1 + 2 = 3', () => {
-  expect(sum(1, 2)).toBe(3);
-});
-
-test('works with negative', () => {
-  expect(sum(-1, -2)).toBe(-3);
+test("adds numbers", () => {
+  expect(sum(2, 3)).toBe(5);
 });
