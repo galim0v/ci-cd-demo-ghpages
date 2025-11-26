@@ -1,0 +1,14 @@
+{
+  "name": "ci-cd-demo-ghpages",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "jest",
+    "build": "mkdir -p dist && cp -r src/* dist/",
+    "predeploy": "npm run build"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0"
+  }
+}
