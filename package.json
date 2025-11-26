@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
-    "build": "powershell Copy-Item -Recurse -Force src dist",
+    "build": "mkdir -p dist && cpr src dist -o",
     "predeploy": "npm run build"
   },
   "devDependencies": {
+    "cpr": "^3.0.1",
     "jest": "^29.0.0",
     "jest-environment-node": "^30.2.0"
   }
