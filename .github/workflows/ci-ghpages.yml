@@ -1,33 +1,48 @@
+# Имя workflow — видно в GitHub Actions
 name: CI + Deploy to GitHub Pages
 
+# Триггер — запускать при каждом push в ветку main
 on:
   push:
     branches: [ "main" ]
 
 jobs:
   build-and-deploy:
+    # Где выполняется — виртуальная машина Ubuntu
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Скачать код из репозитория
       - name: Checkout
         uses: actions/checkout@v4
 
+      # 2. Установить Node.js нужной версии
+      # Это подготовка окружения для JS-проекта
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
 
+      # 3. Установить зависимости из package.json
       - name: Install dependencies
         run: npm install
 
+      # 4. Запустить автоматические тесты
+      # Если тесты упадут — весь workflow остановится
       - name: Run tests
         run: npm test
 
+      # 5. Собрать проект
+      # В результате в папке dist появляется готовый сайт
       - name: Build project
         run: npm run build
 
+      # 6. Задеплоить сайт в GitHub Pages
+      # peaceiris/actions-gh-pages — популярный экшен для деплоя
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
+          # Стандартный токен GitHub для операций в репо
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          # Папка, которую надо выложить как сайт
           publish_dir: ./dist
